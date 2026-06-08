@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'core/theme/app_theme.dart';
 import 'screens/auth/splash_screen.dart';
+import 'screens/profile/profile_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,6 +33,9 @@ class _MyAppState extends State<MyApp> {
       darkTheme: AppTheme.darkTheme,
       themeMode: _themeMode,
       home: SplashScreen(onToggleTheme: _toggleTheme),
+      routes: {
+  '/profile': (context) => ProfileScreen(onToggleTheme: _toggleTheme),
+},
     );
   }
 }
