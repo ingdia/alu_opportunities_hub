@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../core/theme/app_colors.dart';
+import '../../../core/theme/app_colors.dart';
 
 class SignupScreen extends StatefulWidget {
   final VoidCallback onToggleTheme;
@@ -28,12 +28,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   void _signup() {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Account created!', style: GoogleFonts.openSans()),
-          backgroundColor: AppColors.primary,
-        ),
-      );
+      Navigator.pushReplacementNamed(context, '/home');
     }
   }
 
