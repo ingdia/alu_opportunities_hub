@@ -1,3 +1,4 @@
+import '../../../core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/message_model.dart';
@@ -17,8 +18,8 @@ class MessageBubble extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 6),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: const Color(0xFFF0FDF4),
-          border: Border.all(color: const Color(0xFF16A34A)),
+          color: AppColors.primary.withValues(alpha: 0.1),
+          border: Border.all(color: AppColors.primary),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
@@ -27,14 +28,14 @@ class MessageBubble extends StatelessWidget {
             Row(
               children: [
                 const Icon(Icons.campaign,
-                    color: Color(0xFF16A34A), size: 16),
+                    color: AppColors.primary, size: 16),
                 const SizedBox(width: 6),
                 Text(
                   message.senderName,
                   style: GoogleFonts.openSans(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: const Color(0xFF16A34A),
+                    color: AppColors.primary,
                   ),
                 ),
               ],
@@ -73,7 +74,7 @@ class MessageBubble extends StatelessWidget {
                   horizontal: 14, vertical: 10),
               decoration: BoxDecoration(
                 color: isMe
-                    ? const Color(0xFF16A34A)
+                    ? AppColors.primary
                     : const Color(0xFFF1F5F9),
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(16),
@@ -93,7 +94,7 @@ class MessageBubble extends StatelessWidget {
                       style: GoogleFonts.openSans(
                         fontSize: 11,
                         fontWeight: FontWeight.bold,
-                        color: const Color(0xFF16A34A),
+                        color: AppColors.primary,
                       ),
                     ),
                   Text(
@@ -123,7 +124,7 @@ class MessageBubble extends StatelessWidget {
   Widget _avatar(String initials) {
     return CircleAvatar(
       radius: 16,
-      backgroundColor: const Color(0xFF16A34A),
+      backgroundColor: AppColors.primary,
       child: Text(
         initials,
         style: GoogleFonts.openSans(
