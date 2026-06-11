@@ -1,3 +1,4 @@
+import '../../../core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -78,7 +79,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: _hasText
-                    ? const Color(0xFF16A34A)
+                    ? AppColors.primary
                     : const Color(0xFFCBD5E1),
                 shape: BoxShape.circle,
               ),

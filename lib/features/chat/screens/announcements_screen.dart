@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/message_model.dart';
 import '../data/mock_messages.dart';
 import '../widgets/message_bubble.dart';
+import '../../../core/theme/app_colors.dart';
 
 class AnnouncementsScreen extends StatefulWidget {
   const AnnouncementsScreen({super.key});

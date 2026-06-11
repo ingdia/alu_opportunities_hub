@@ -3,6 +3,7 @@ import '../models/message_model.dart';
 import '../data/mock_messages.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/chat_input_bar.dart';
+import '../../../core/theme/app_colors.dart';
 
 class ChatScreen extends StatefulWidget {
   final String communityName;
@@ -48,7 +49,6 @@ class _ChatScreenState extends State<ChatScreen> {
       _messages.add(newMessage);
     });
 
-    // Auto scroll to latest message
     Future.delayed(const Duration(milliseconds: 100), () {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
@@ -90,7 +90,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.campaign_outlined, color: Color(0xFF16A34A)),
+            icon: Icon(Icons.campaign_outlined, color: AppColors.primary),
             tooltip: 'Announcements',
             onPressed: () {
               Navigator.pushNamed(context, '/announcements');
@@ -100,7 +100,6 @@ class _ChatScreenState extends State<ChatScreen> {
             icon: const Icon(Icons.people_outline, color: Colors.black54),
             tooltip: 'Participants',
             onPressed: () {
-              // To be connected by Blain (Profile/Navigation)
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Participants list coming soon')),
               );
@@ -114,12 +113,12 @@ class _ChatScreenState extends State<ChatScreen> {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: const Color(0xFFF0FDF4),
+            color: AppColors.primary.withValues(alpha: 0.1),
             child: Text(
               '💬 Community chat for ${widget.communityName}',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
-                color: Color(0xFF16A34A),
+                color: AppColors.primary,
               ),
             ),
           ),

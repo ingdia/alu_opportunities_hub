@@ -1,4 +1,5 @@
 import '../models/message_model.dart';
+import '../../../core/theme/app_colors.dart';
 
 // Mock community chat messages for "ALU Hackathon 2026" event
 final List<Message> mockCommunityMessages = [

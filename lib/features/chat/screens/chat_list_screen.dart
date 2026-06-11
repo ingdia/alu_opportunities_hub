@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'chat_screen.dart';
+import '../../../core/theme/app_colors.dart';
 
 class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key});
@@ -104,8 +105,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit_outlined, color: Color(0xFF16A34A)),
-            tooltip: 'New Chat',
+            icon: Icon(Icons.edit_outlined, color: AppColors.primary),            tooltip: 'New Chat',
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -210,7 +210,7 @@ class _ChatTile extends StatelessWidget {
       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       leading: CircleAvatar(
         radius: 24,
-        backgroundColor: const Color(0xFF16A34A),
+        backgroundColor: AppColors.primary,
         child: Text(
           chat['avatar'],
           style: GoogleFonts.openSans(
@@ -240,7 +240,7 @@ class _ChatTile extends StatelessWidget {
             style: GoogleFonts.openSans(
               fontSize: 11,
               color: hasUnread
-                  ? const Color(0xFF16A34A)
+                  ? AppColors.primary
                   : Colors.grey,
             ),
           ),
@@ -263,8 +263,8 @@ class _ChatTile extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(left: 8),
               padding: const EdgeInsets.all(6),
-              decoration: const BoxDecoration(
-                color: Color(0xFF16A34A),
+              decoration: BoxDecoration(
+                color: AppColors.primary,
                 shape: BoxShape.circle,
               ),
               child: Text(
