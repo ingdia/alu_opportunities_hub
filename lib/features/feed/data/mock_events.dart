@@ -1,0 +1,56 @@
+const List<Map<String, String>> mockEvents = [
+  {
+    'id': 'evt1',
+    'title': 'ALU Hackathon 2026',
+    'date': 'June 15, 2026',
+    'location': 'Kigali Campus',
+    'category': 'Hackathon',
+    'organizer': 'Tech & Innovation Hub',
+    'spots': '48 spots left',
+    'description':
+        'A 48-hour hackathon to build solutions for African challenges.',
+  },
+  {
+    'id': 'evt2',
+    'title': 'Design Thinking Workshop',
+    'date': 'June 20, 2026',
+    'location': 'Online',
+    'category': 'Workshop',
+    'organizer': 'Academic Team',
+    'spots': '30 spots left',
+    'description': 'Learn human-centered design methods with industry mentors.',
+  },
+  {
+    'id': 'evt3',
+    'title': 'Entrepreneurship Pitch Night',
+    'date': 'June 25, 2026',
+    'location': 'Mauritius Campus',
+    'category': 'Event',
+    'organizer': 'Entrepreneurship Club',
+    'spots': '60 spots left',
+    'description':
+        'Pitch your startup idea to a panel of investors and alumni.',
+  },
+  {
+    'id': 'evt4',
+    'title': 'Campus Ambassador Program',
+    'date': 'July 1, 2026',
+    'location': 'Kigali Campus',
+    'category': 'Program',
+    'organizer': 'Student Affairs',
+    'spots': '15 spots left',
+    'description':
+        'Represent ALU in your community and grow your leadership skills.',
+  },
+  {
+    'id': 'evt5',
+    'title': 'AI & Ethics Panel Discussion',
+    'date': 'July 8, 2026',
+    'location': 'Online',
+    'category': 'Talk',
+    'organizer': 'Campus Leaders',
+    'spots': '100 spots left',
+    'description':
+        'A critical conversation on AI fairness, bias, and responsibility in Africa.',
+  },
+];
