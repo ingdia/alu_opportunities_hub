@@ -33,18 +33,34 @@ class _ChatInputBarState extends State<ChatInputBar> {
 
   void _handleSend() {
     final text = _controller.text.trim();
-    if (text.isEmpty) return;
+    if (text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please type a message first'),
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
     widget.onSend(text);
     _controller.clear();
   }
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? AppColors.darkCard : Colors.white;
+    final fillColor = isDark ? AppColors.darkBackground : const Color(0xFFF1F5F9);
+    final textColor = isDark ? AppColors.darkTextPrimary : Colors.black87;
+    final hintColor = isDark ? AppColors.darkTextMuted : Colors.grey;
+    final borderColor = isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: Color(0xFFE2E8F0))),
+      decoration: BoxDecoration(
+        color: bgColor,
+        border: Border(top: BorderSide(color: borderColor)),
       ),
       child: Row(
         children: [
@@ -53,12 +69,12 @@ class _ChatInputBarState extends State<ChatInputBar> {
               controller: _controller,
               textCapitalization: TextCapitalization.sentences,
               maxLines: null,
-              style: GoogleFonts.openSans(fontSize: 14),
+              style: GoogleFonts.openSans(fontSize: 14, color: textColor),
               decoration: InputDecoration(
                 hintText: 'Type a message...',
-                hintStyle: GoogleFonts.openSans(color: Colors.grey),
+                hintStyle: GoogleFonts.openSans(color: hintColor),
                 filled: true,
-                fillColor: const Color(0xFFF1F5F9),
+                fillColor: fillColor,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 10,

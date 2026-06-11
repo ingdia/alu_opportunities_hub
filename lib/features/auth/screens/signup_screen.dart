@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/state/user_session.dart';
 
 class SignupScreen extends StatefulWidget {
   final VoidCallback onToggleTheme;
-  const SignupScreen({super.key, required this.onToggleTheme});
+  final void Function(String name, String email, UserRole role) onLogin;
+  const SignupScreen({super.key, required this.onToggleTheme, required this.onLogin});
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
@@ -28,6 +30,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
   void _signup() {
     if (_formKey.currentState!.validate()) {
+      final role = _isStudent ? UserRole.student : UserRole.organizer;
+      widget.onLogin(_nameController.text.trim(), _emailController.text.trim(), role);
       Navigator.pushReplacementNamed(context, '/home');
     }
   }
@@ -39,323 +43,314 @@ class _SignupScreenState extends State<SignupScreen> {
     final textMuted = isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted;
     final cardColor = isDark ? AppColors.darkCard : AppColors.lightCard;
     final borderColor = isDark ? AppColors.darkBorder : AppColors.lightBorder;
+    final bg = isDark ? AppColors.darkBackground : AppColors.lightBackground;
 
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Back button and theme toggle
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.arrow_back, color: textPrimary),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        isDark ? Icons.light_mode : Icons.dark_mode,
-                        color: AppColors.primary,
-                      ),
-                      onPressed: widget.onToggleTheme,
-                    ),
-                  ],
-                ),
-
-                // Logo
-                Container(
-                  width: 64,
-                  height: 64,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'A',
-                      style: GoogleFonts.openSans(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                Text(
-                  'Create your account',
-                  style: GoogleFonts.openSans(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Join the ALU community today',
-                  style: GoogleFonts.openSans(
-                    fontSize: 13,
-                    color: textMuted,
-                  ),
-                ),
-                const SizedBox(height: 28),
-
-                // Role selector
-                Container(
-                  decoration: BoxDecoration(
-                    color: cardColor,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: borderColor),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () => setState(() => _isStudent = true),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
+      backgroundColor: bg,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // ── Photo header ─────────────────────────────────────────
+            SizedBox(
+              height: 160,
+              width: double.infinity,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.network(
+                    'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=800&q=80',
+                    fit: BoxFit.cover,
+                    loadingBuilder: (_, child, progress) => progress == null
+                        ? child
+                        : Container(
                             decoration: BoxDecoration(
-                              color: _isStudent ? AppColors.primary : Colors.transparent,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Student',
-                                style: GoogleFonts.openSans(
-                                  fontWeight: FontWeight.w600,
-                                  color: _isStudent ? Colors.white : textMuted,
-                                ),
+                              gradient: LinearGradient(
+                                colors: [AppColors.primaryDark, AppColors.primary],
                               ),
                             ),
                           ),
+                    errorBuilder: (_, __, ___) => Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [AppColors.primaryDark, AppColors.primary],
                         ),
                       ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () => setState(() => _isStudent = false),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            decoration: BoxDecoration(
-                              color: !_isStudent ? AppColors.primary : Colors.transparent,
-                              borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.black54, Colors.black12],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                      ),
+                    ),
+                  ),
+                  SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                                color: Colors.white, size: 20),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
+                              color: Colors.white,
                             ),
-                            child: Center(
-                              child: Text(
-                                'Organizer',
-                                style: GoogleFonts.openSans(
-                                  fontWeight: FontWeight.w600,
-                                  color: !_isStudent ? Colors.white : textMuted,
-                                ),
-                              ),
-                            ),
+                            onPressed: widget.onToggleTheme,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 24,
+                    bottom: 24,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Create account',
+                          style: GoogleFonts.openSans(
+                            color: Colors.white,
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Name field
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Full Name',
-                    style: GoogleFonts.openSans(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: textMuted,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                TextFormField(
-                  controller: _nameController,
-                  style: GoogleFonts.openSans(color: textPrimary),
-                  decoration: InputDecoration(
-                    hintText: 'Your full name',
-                    hintStyle: GoogleFonts.openSans(color: textMuted),
-                    filled: true,
-                    fillColor: cardColor,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: borderColor),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: borderColor),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: AppColors.primary, width: 2),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Email field
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Email',
-                    style: GoogleFonts.openSans(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: textMuted,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  style: GoogleFonts.openSans(color: textPrimary),
-                  decoration: InputDecoration(
-                    hintText: 'you@alustudent.com',
-                    hintStyle: GoogleFonts.openSans(color: textMuted),
-                    filled: true,
-                    fillColor: cardColor,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: borderColor),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: borderColor),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: AppColors.primary, width: 2),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    if (!value.contains('@')) {
-                      return 'Please enter a valid email';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Password field
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Password',
-                    style: GoogleFonts.openSans(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: textMuted,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  style: GoogleFonts.openSans(color: textPrimary),
-                  decoration: InputDecoration(
-                    hintText: '••••••••',
-                    hintStyle: GoogleFonts.openSans(color: textMuted),
-                    filled: true,
-                    fillColor: cardColor,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: borderColor),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: borderColor),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: AppColors.primary, width: 2),
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                        color: textMuted,
-                      ),
-                      onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a password';
-                    }
-                    if (value.length < 6) {
-                      return 'Password must be at least 6 characters';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 28),
-
-                // Signup button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _signup,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: Text(
-                      'Create account',
-                      style: GoogleFonts.openSans(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // Login link
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Already have an account? ',
-                      style: GoogleFonts.openSans(color: textMuted, fontSize: 13),
-                    ),
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Text(
-                        'Log in',
-                        style: GoogleFonts.openSans(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
+                        Text(
+                          'Join the ALU community today',
+                          style: GoogleFonts.openSans(color: Colors.white70, fontSize: 14),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
+
+            // ── Form ─────────────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 28, 20, 40),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Role tabs
+                    Container(
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? Colors.white.withValues(alpha: 0.06)
+                            : AppColors.primary.withValues(alpha: 0.07),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      padding: const EdgeInsets.all(4),
+                      child: Row(
+                        children: [
+                          _roleTab(Icons.school_outlined, 'Student', _isStudent,
+                              () => setState(() => _isStudent = true)),
+                          _roleTab(Icons.badge_outlined, 'Organizer', !_isStudent,
+                              () => setState(() => _isStudent = false)),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    _label('Full Name', textMuted),
+                    const SizedBox(height: 6),
+                    _inputField(
+                      controller: _nameController,
+                      hint: 'Your full name',
+                      icon: Icons.person_outline_rounded,
+                      cardColor: cardColor,
+                      borderColor: borderColor,
+                      textMuted: textMuted,
+                      textPrimary: textPrimary,
+                      validator: (v) => (v == null || v.isEmpty) ? 'Please enter your name' : null,
+                    ),
+                    const SizedBox(height: 16),
+
+                    _label('Email address', textMuted),
+                    const SizedBox(height: 6),
+                    _inputField(
+                      controller: _emailController,
+                      hint: 'you@alustudent.com',
+                      icon: Icons.mail_outline_rounded,
+                      cardColor: cardColor,
+                      borderColor: borderColor,
+                      textMuted: textMuted,
+                      textPrimary: textPrimary,
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (v) {
+                        if (v == null || v.isEmpty) return 'Please enter your email';
+                        if (!v.contains('@')) return 'Enter a valid email';
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
+                    _label('Password', textMuted),
+                    const SizedBox(height: 6),
+                    _inputField(
+                      controller: _passwordController,
+                      hint: '••••••••',
+                      icon: Icons.lock_outline_rounded,
+                      cardColor: cardColor,
+                      borderColor: borderColor,
+                      textMuted: textMuted,
+                      textPrimary: textPrimary,
+                      obscure: _obscurePassword,
+                      suffix: IconButton(
+                        icon: Icon(
+                          _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                          color: textMuted,
+                          size: 20,
+                        ),
+                        onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                      ),
+                      validator: (v) {
+                        if (v == null || v.isEmpty) return 'Please enter a password';
+                        if (v.length < 6) return 'Minimum 6 characters';
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 28),
+
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _signup,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        ),
+                        child: Text(
+                          'Create account',
+                          style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 28),
+
+                    Row(
+                      children: [
+                        Expanded(child: Divider(color: borderColor)),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Text('or', style: GoogleFonts.openSans(color: textMuted, fontSize: 13)),
+                        ),
+                        Expanded(child: Divider(color: borderColor)),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    Center(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('Already have an account? ',
+                              style: GoogleFonts.openSans(color: textMuted, fontSize: 13)),
+                          GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: Text(
+                              'Log in',
+                              style: GoogleFonts.openSans(
+                                  color: AppColors.primary, fontWeight: FontWeight.w700, fontSize: 13),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _roleTab(IconData icon, String label, bool active, VoidCallback onTap) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(vertical: 11),
+          decoration: BoxDecoration(
+            color: active ? AppColors.primary : Colors.transparent,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: active
+                ? [BoxShadow(color: AppColors.primary.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))]
+                : [],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 16, color: active ? Colors.white : AppColors.textMuted),
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: GoogleFonts.openSans(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                  color: active ? Colors.white : AppColors.textMuted,
+                ),
+              ),
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _label(String text, Color color) => Text(
+        text,
+        style: GoogleFonts.openSans(fontSize: 13, fontWeight: FontWeight.w600, color: color),
+      );
+
+  Widget _inputField({
+    required TextEditingController controller,
+    required String hint,
+    required IconData icon,
+    required Color cardColor,
+    required Color borderColor,
+    required Color textMuted,
+    required Color textPrimary,
+    bool obscure = false,
+    Widget? suffix,
+    TextInputType? keyboardType,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      obscureText: obscure,
+      keyboardType: keyboardType,
+      style: GoogleFonts.openSans(color: textPrimary, fontSize: 14),
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: GoogleFonts.openSans(color: textMuted, fontSize: 14),
+        prefixIcon: Icon(icon, color: AppColors.primary, size: 20),
+        suffixIcon: suffix,
+        filled: true,
+        fillColor: cardColor,
+        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: borderColor)),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: borderColor)),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: AppColors.primary, width: 2)),
+        errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Colors.redAccent)),
+        focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Colors.redAccent, width: 2)),
+      ),
+      validator: validator,
     );
   }
 }

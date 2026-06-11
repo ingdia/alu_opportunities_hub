@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/state/user_session.dart';
 import 'onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   final VoidCallback onToggleTheme;
-  const SplashScreen({super.key, required this.onToggleTheme});
+  final void Function(String name, String email, UserRole role) onLogin;
+  const SplashScreen({super.key, required this.onToggleTheme, required this.onLogin});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -19,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (_) => OnboardingScreen(onToggleTheme: widget.onToggleTheme),
+          builder: (_) => OnboardingScreen(onToggleTheme: widget.onToggleTheme, onLogin: widget.onLogin),
         ),
       );
     });

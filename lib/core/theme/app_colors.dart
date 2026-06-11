@@ -18,4 +18,8 @@ class AppColors {
   // Primary accent
   static const primary = Color(0xFF10B981);
   static const primaryDark = Color(0xFF059669);
+
+  // Semantic
+  static const coral = Color(0xFF10B981);
+  static const textMuted = Color(0xFF64748B);
 }
